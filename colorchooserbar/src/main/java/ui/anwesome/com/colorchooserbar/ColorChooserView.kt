@@ -11,6 +11,10 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 val colors:Array<String> = arrayOf("#673AB7","#448AFF","#FF5722","#f44336","#1A237E","#AD1457")
 class ColorChooserView:View {
+    var onColorChoosenListener:OnColorChoosen?=null
+    fun addColorChoosenListener(onColorListener:(Int)->Unit) {
+        onColorChoosenListener = OnColorChoosen(onColorListener)
+    }
     constructor(ctx:Context):super(ctx)
     constructor(ctx: Context,attrs:AttributeSet):super(ctx,attrs)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -97,6 +101,7 @@ class ColorChooserView:View {
             if(animated) {
                 container.update { color->
                     animated = false
+                    view.onColorChoosenListener?.onColor?.invoke(color)
                 }
                 try {
                     Thread.sleep(50)
@@ -133,6 +138,9 @@ class ColorChooserView:View {
         fun handleTap(x:Float,y:Float) {
             animator?.handleTap(x,y)
         }
+    }
+    data class OnColorChoosen(var onColor:(Int)->Unit) {
+
     }
 }
 fun ConcurrentLinkedQueue<ColorChooserView.ColorChooserCircle>.at(j:Int):ColorChooserView.ColorChooserCircle? {
