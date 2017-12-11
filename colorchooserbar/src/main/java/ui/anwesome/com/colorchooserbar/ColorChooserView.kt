@@ -43,6 +43,7 @@ class ColorChooserView:View {
         var circles:ConcurrentLinkedQueue<ColorChooserCircle> = ConcurrentLinkedQueue()
         var prev:ColorChooserCircle?=null
         var curr:ColorChooserCircle?=null
+        var state = ColorChooserState()
         init {
             if(colors.size > 0) {
                 var x = 3*gap/2
@@ -57,12 +58,19 @@ class ColorChooserView:View {
                 circle.draw(canvas,paint)
             }
         }
-        fun update(stopcb:()->Unit) {
-
+        fun update(stopcb:(Int)->Unit) {
+            state.update({ scale ->
+                curr?.increaseR(scale,gap/2)
+                prev?.decreaseR(scale,gap/2)
+            },{
+                stopcb(Color.parseColor(colors[curr?.i?:0]))
+                prev = curr
+            })
         }
         fun handleTap(x:Float,y:Float,startcb:()->Unit) {
             circles.forEach { circle ->
                 circle.handleTap(x,y)
+                curr = circle 
                 startcb()
             }
         }
