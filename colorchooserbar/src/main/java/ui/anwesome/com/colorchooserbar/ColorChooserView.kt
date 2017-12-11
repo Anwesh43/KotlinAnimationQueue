@@ -70,7 +70,7 @@ class ColorChooserView:View {
         fun handleTap(x:Float,y:Float,startcb:()->Unit) {
             circles.forEach { circle ->
                 circle.handleTap(x,y)
-                curr = circle 
+                curr = circle
                 startcb()
             }
         }
@@ -83,6 +83,33 @@ class ColorChooserView:View {
                 scale = 1f
                 stopcb()
             }
+        }
+    }
+    class ColorChooserAnimator(var container:ColorChooserContainer,var view:ColorChooserView) {
+        var animated = false
+        fun update() {
+            if(animated) {
+                container.update { color->
+                    animated = false
+                }
+                try {
+                    Thread.sleep(50)
+                    view.invalidate()
+                }
+                catch (ex:Exception) {
+
+                }
+            }
+        }
+        fun draw(canvas: Canvas,paint: Paint) {
+            canvas.drawColor(Color.parseColor("#9E9E9E"))
+            container.draw(canvas,paint)
+        }
+        fun handleTap(x:Float,y:Float) {
+            container.handleTap(x,y,{
+                animated = true
+                view.postInvalidate()
+            })
         }
     }
 }
