@@ -35,9 +35,9 @@ class ColorChooserView:View {
             r = or+(mr-or)*scale
         }
         fun decreaseR(scale:Float,mr:Float) {
-            r = or+(mr-or)*scale
+            r = or+(mr-or)*(1-scale)
         }
-        fun handleTap(x:Float,y:Float):Boolean = x>=this.x -r && x<=this.x+r && y<=this.y -r && y>=this.y+r
+        fun handleTap(x:Float,y:Float):Boolean = x>=this.x - 2*or && x<=this.x+2*or && y >= this.y -2*or && y <= this.y+2*or
         override fun compareTo(other:ColorChooserCircle):Int = (x-other.x).toInt()
     }
     data class ColorChooserContainer(var w:Float,var h:Float,var gap:Float = Math.min(w/(2* colors.size+1),h/2)) {
@@ -49,7 +49,7 @@ class ColorChooserView:View {
             if(colors.size > 0) {
                 var x = 3*gap/2
                 for (i in 0..colors.size - 1) {
-                    circles.add(ColorChooserCircle(i,x,h/2,gap/4))
+                    circles.add(ColorChooserCircle(i,x,h/2,gap/3))
                     x+=2*gap
                 }
             }
@@ -70,9 +70,11 @@ class ColorChooserView:View {
         }
         fun handleTap(x:Float,y:Float,startcb:()->Unit) {
             circles.forEach { circle ->
-                circle.handleTap(x,y)
-                curr = circle
-                startcb()
+                if(circle.handleTap(x,y)) {
+                    curr = circle
+                    startcb()
+                    state.startcb()
+                }
             }
         }
     }
@@ -84,6 +86,9 @@ class ColorChooserView:View {
                 scale = 1f
                 stopcb()
             }
+        }
+        fun startcb() {
+            scale = 0f
         }
     }
     class ColorChooserAnimator(var container:ColorChooserContainer,var view:ColorChooserView) {
