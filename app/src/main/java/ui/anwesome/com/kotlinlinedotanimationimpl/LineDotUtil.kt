@@ -1,6 +1,8 @@
 package ui.anwesome.com.kotlinlinedotanimationimpl
 
 import android.app.Activity
+import android.support.v7.app.AppCompatActivity
+import android.view.WindowManager
 import ui.anwesome.com.kotlindotlineanimation.LineDotView
 
 /**
@@ -8,9 +10,9 @@ import ui.anwesome.com.kotlindotlineanimation.LineDotView
  */
 class LineDotUtil {
     companion object {
-        fun create(activity: Activity):LineDotView {
+        fun create(activity: AppCompatActivity):LineDotView {
             var view = LineDotView.create(activity)
             return view
         }
- }
+    }
 }

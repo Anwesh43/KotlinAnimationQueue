@@ -2,6 +2,7 @@ package ui.anwesome.com.kotlinlinedotanimationimpl
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import android.widget.Toast
 
 
@@ -16,5 +17,11 @@ class MainActivity : AppCompatActivity() {
         },{
             Toast.makeText(this,"moved right",Toast.LENGTH_SHORT).show()
         })
+        fullScreen()
     }
+}
+fun AppCompatActivity.fullScreen() {
+    var actionBar = supportActionBar
+    actionBar?.hide()
+    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 }
