@@ -84,6 +84,7 @@ class LineDotView(ctx:Context):View(ctx) {
                 container = LineDotContainer(w,h)
             }
             container?.draw(canvas,paint)
+            queue.update()
             time++
         }
         fun startAnimation() {
