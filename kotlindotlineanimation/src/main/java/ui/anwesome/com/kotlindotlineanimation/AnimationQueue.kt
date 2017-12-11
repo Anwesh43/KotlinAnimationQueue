@@ -24,26 +24,43 @@ class AnimationQueue(var view:View) {
     }
     fun addAnimation(vararg cbs:(Float)->Unit) {
         if(!animated) {
-            cbs.forEach {
-                container.addAnimation(AnimationState.instance(it))
+            if(container.animContainer.size == 0) {
+                cbs.forEach {
+                    container.addAnimation(AnimationState.instance(it))
+                }
             }
+            container.start()
             animated = true
             view.postInvalidate()
         }
     }
 }
 class AnimationQueueContainer {
+    var j = 0
+    var prevDir = 1
+    var dir = 0
     var animContainer:ConcurrentLinkedQueue<AnimationState> = ConcurrentLinkedQueue()
     fun addAnimation(state:AnimationState) {
         animContainer.add(state)
     }
+    fun start() {
+        dir = prevDir
+    }
     fun update() {
-        animContainer.at(0)?.update()
-        if(animContainer?.at(0)?.stopped()?:false) {
-            animContainer.remove(animContainer?.at(0))
+        animContainer.at(j)?.update()
+        if(animContainer?.at(j)?.stopped()?:false) {
+            j+=dir
+            if(dir == -1) {
+                animContainer.remove()
+            }
+            if(j == animContainer.size || j == -1) {
+                prevDir*=-1
+                j+=prevDir
+                dir = 0
+            }
         }
     }
-    fun stopped():Boolean = animContainer.size == 0
+    fun stopped():Boolean = dir == 0
 }
 data class AnimationState(var scale:Float = 0f,var dir:Float = 0f,var cb:(Float)->Unit,var prevScale:Float = 0f){
     fun update(){
