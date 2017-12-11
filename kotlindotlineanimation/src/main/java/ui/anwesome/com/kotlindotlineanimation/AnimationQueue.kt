@@ -8,9 +8,9 @@ import java.util.concurrent.*
 class AnimationQueue(var view:View) {
     var animated = false
     var container = AnimationQueueContainer()
-    fun update() {
+    fun update(stopcb:(Int)->Unit) {
         if(animated) {
-            container.update()
+            container.update(stopcb)
             if(container.stopped()) {
                 animated = false
             }
@@ -47,7 +47,7 @@ class AnimationQueueContainer {
         dir = prevDir
         animContainer?.at(j)?.startUpdating()
     }
-    fun update() {
+    fun update(stopcb:(Int)->Unit) {
         animContainer.at(j)?.update()
         if(animContainer?.at(j)?.stopped()?:false) {
             j+=dir
@@ -55,6 +55,7 @@ class AnimationQueueContainer {
                 prevDir*=-1
                 j+=prevDir
                 dir = 0
+                stopcb(prevDir)
                 if(j == 0) {
                     animContainer = ConcurrentLinkedQueue()
                 }

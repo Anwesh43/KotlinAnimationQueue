@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class LineDotView(ctx:Context):View(ctx) {
     val paint:Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     val renderer = Renderer(this)
+    var onMovementListener:OnMovementListener?=null
     override fun onDraw(canvas:Canvas) {
         canvas.drawColor(Color.parseColor("#212121"))
         renderer.render(canvas,paint)
@@ -23,6 +24,9 @@ class LineDotView(ctx:Context):View(ctx) {
             }
         }
         return true
+    }
+    fun addMovementListener(onLeft: () -> Unit,onRight: () -> Unit) {
+        onMovementListener = OnMovementListener(onLeft,onRight)
     }
     data class LineDot(var x:Float,var y:Float,var or:Float,var r:Float=0f) {
         fun draw(canvas:Canvas,paint:Paint) {
@@ -43,7 +47,7 @@ class LineDotView(ctx:Context):View(ctx) {
         var ox = 0f
         init {
             for(i in 0..1) {
-                lineDots.add(LineDot(w/10+w/2*i,h/2,Math.min(w,h)/10))
+                lineDots.add(LineDot((w/2-w/4)+w/2*i,h/2,Math.min(w,h)/10))
             }
             if(lineDots.size == 2) {
                 fx = lineDots.first().x
@@ -88,7 +92,12 @@ class LineDotView(ctx:Context):View(ctx) {
                 container = LineDotContainer(w,h)
             }
             container?.draw(canvas,paint)
-            queue.update()
+            queue.update({ dir ->
+                when(dir) {
+                    1 -> view.onMovementListener?.onLeft?.invoke()
+                    -1 -> view.onMovementListener?.onRight?.invoke()
+                }
+            })
             time++
         }
         fun startAnimation() {
@@ -102,4 +111,5 @@ class LineDotView(ctx:Context):View(ctx) {
             return view
         }
     }
+    data class OnMovementListener(var onLeft:()->Unit,var onRight:()->Unit)
 }
