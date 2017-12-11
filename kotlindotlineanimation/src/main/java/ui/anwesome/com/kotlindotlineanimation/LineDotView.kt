@@ -3,6 +3,7 @@ package ui.anwesome.com.kotlindotlineanimation
 /**
  * Created by anweshmishra on 11/12/17.
  */
+import android.app.Activity
 import android.view.*
 import android.content.*
 import android.graphics.*
@@ -89,6 +90,13 @@ class LineDotView(ctx:Context):View(ctx) {
         }
         fun startAnimation() {
             container?.startAnimation(queue)
+        }
+    }
+    companion object {
+        fun create(activity:Activity):LineDotView {
+            var view = LineDotView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
