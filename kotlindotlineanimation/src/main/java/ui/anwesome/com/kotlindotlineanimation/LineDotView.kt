@@ -14,10 +14,12 @@ class LineDotView:View {
     constructor(ctx:Context):super(ctx)
     constructor(ctx:Context,attrs:AttributeSet):super(ctx,attrs)
     val paint:Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    var lineDotColor =  Color.parseColor("#2979FF")
     val renderer = Renderer(this)
     var onMovementListener:OnMovementListener?=null
     override fun onDraw(canvas:Canvas) {
         canvas.drawColor(Color.parseColor("#212121"))
+        paint.color = lineDotColor
         renderer.render(canvas,paint)
     }
     override fun onTouchEvent(event:MotionEvent):Boolean {
@@ -61,7 +63,6 @@ class LineDotView:View {
             }
         }
         fun draw(canvas:Canvas,paint:Paint) {
-            paint.color = Color.parseColor("#2979FF")
             lineDots.forEach { lineDot ->
                 lineDot.draw(canvas,paint)
             }
