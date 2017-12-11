@@ -45,18 +45,22 @@ class AnimationQueueContainer {
     }
     fun start() {
         dir = prevDir
+        animContainer?.at(j)?.startUpdating()
     }
     fun update() {
         animContainer.at(j)?.update()
         if(animContainer?.at(j)?.stopped()?:false) {
             j+=dir
-            if(dir == -1) {
-                animContainer.remove()
-            }
             if(j == animContainer.size || j == -1) {
                 prevDir*=-1
                 j+=prevDir
                 dir = 0
+                if(j == 0) {
+                    animContainer = ConcurrentLinkedQueue()
+                }
+            }
+            else {
+                animContainer.at(j)?.startUpdating()
             }
         }
     }
@@ -71,6 +75,9 @@ data class AnimationState(var scale:Float = 0f,var dir:Float = 0f,var cb:(Float)
             prevScale = scale
         }
         cb(scale)
+    }
+    fun startUpdating() {
+        dir = 1-2*scale
     }
     fun stopped():Boolean = dir == 0f
     companion object {

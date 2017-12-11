@@ -43,20 +43,23 @@ class LineDotView(ctx:Context):View(ctx) {
         var ox = 0f
         init {
             for(i in 0..1) {
-                lineDots.add(LineDot(w/10+w/2*i,h/2,Math.min(w,h)/3))
+                lineDots.add(LineDot(w/10+w/2*i,h/2,Math.min(w,h)/10))
             }
             if(lineDots.size == 2) {
                 fx = lineDots.first().x
                 lx = lineDots.first().x
                 mx = (lineDots.last().x-fx)
                 ox = fx
+                lineDots.first().r = lineDots.first().or
             }
         }
         fun draw(canvas:Canvas,paint:Paint) {
+            paint.color = Color.parseColor("#2979FF")
             lineDots.forEach { lineDot ->
                 lineDot.draw(canvas,paint)
             }
             if(lineDots.size == 2) {
+                paint.strokeCap = Paint.Cap.ROUND
                 var first = lineDots.first()
                 var last = lineDots.last()
                 paint.strokeWidth = Math.min(w,h)/50
