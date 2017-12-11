@@ -67,6 +67,16 @@ class ColorChooserView:View {
             }
         }
     }
+    data class ColorChooserState(var scale:Float = 0f) {
+        fun update(updatecb:(Float)->Unit,stopcb:()->Unit) {
+            scale+=0.1f
+            updatecb(scale)
+            if(scale > 1){
+                scale = 1f
+                stopcb()
+            }
+        }
+    }
 }
 fun ConcurrentLinkedQueue<ColorChooserView.ColorChooserCircle>.at(j:Int):ColorChooserView.ColorChooserCircle? {
     var i = 0
