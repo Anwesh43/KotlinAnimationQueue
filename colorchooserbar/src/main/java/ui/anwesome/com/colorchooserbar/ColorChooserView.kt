@@ -112,6 +112,22 @@ class ColorChooserView:View {
             })
         }
     }
+    class ColorChooserRenderer(var view:ColorChooserView,var time:Int = 0) {
+        var animator:ColorChooserAnimator?=null
+        fun render(canvas: Canvas,paint:Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                animator = ColorChooserAnimator(ColorChooserContainer(w,h),view)
+            }
+            animator?.draw(canvas,paint)
+            animator?.update()
+            time++
+        }
+        fun handleTap(x:Float,y:Float) {
+            animator?.handleTap(x,y)
+        }
+    }
 }
 fun ConcurrentLinkedQueue<ColorChooserView.ColorChooserCircle>.at(j:Int):ColorChooserView.ColorChooserCircle? {
     var i = 0
