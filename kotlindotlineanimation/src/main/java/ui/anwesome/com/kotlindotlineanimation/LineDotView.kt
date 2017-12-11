@@ -7,9 +7,12 @@ import android.app.Activity
 import android.view.*
 import android.content.*
 import android.graphics.*
+import android.util.AttributeSet
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class LineDotView(ctx:Context):View(ctx) {
+class LineDotView:View {
+    constructor(ctx:Context):super(ctx)
+    constructor(ctx:Context,attrs:AttributeSet):super(ctx,attrs)
     val paint:Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     val renderer = Renderer(this)
     var onMovementListener:OnMovementListener?=null
