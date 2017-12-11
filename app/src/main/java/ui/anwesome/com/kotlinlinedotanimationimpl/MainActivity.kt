@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Toast
+import ui.anwesome.com.colorchooserbar.ColorChooserView
+import ui.anwesome.com.kotlindotlineanimation.LineDotView
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +19,11 @@ class MainActivity : AppCompatActivity() {
 //        },{
 //            Toast.makeText(this,"moved right",Toast.LENGTH_SHORT).show()
 //        })
+        val lineDot:LineDotView = findViewById(R.id.line_dot) as LineDotView
+        val chooser:ColorChooserView = findViewById(R.id.chooser) as ColorChooserView
+        chooser.addColorChoosenListener { color ->
+            lineDot.lineDotColor = color
+        }
         fullScreen()
     }
 }
